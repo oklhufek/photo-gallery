@@ -81,4 +81,8 @@ export class Tab2Page {
   prevPage() {
     this.pokemonService.prevPage();
   }
+
+  toggleFavoriteFromDetail() {
+    this.pokemonService.toggleFavoriteFromDetail();
+  }
 }

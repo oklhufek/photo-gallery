@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Oblíbení Pokémoni
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,11 +9,28 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="large">Oblíbení</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <!-- seznam oblíbených Pokémonů -->
+  <ion-grid *ngIf="pokemonService.favorites.length; else noFavs">
+    <ion-row>
+      <ion-col
+        size="6"
+        sizeMd="4"
+        sizeLg="3"
+        *ngFor="let f of pokemonService.favorites"
+      >
+        <ion-img [src]="f.image" alt="{{ f.name }}"></ion-img>
+        <p class="ion-text-center">{{ f.name | titlecase }}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <p>Počet Pokémonů v paměti: {{ pokemonService.pokemon.length }}</p>
+  <ng-template #noFavs>
+    <p class="ion-text-center ion-padding">
+      Zatím nemáš žádné oblíbené Pokémony. Vyber je na záložce Pokédex (Tab 2).
+    </p>
+  </ng-template>
 </ion-content>

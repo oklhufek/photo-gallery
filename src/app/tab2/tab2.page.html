@@ -85,6 +85,18 @@
                 </ion-grid>
               </div>
 
+              <ion-button
+                expand="block"
+                color="warning"
+                (click)="toggleFavoriteFromDetail()"
+              >
+                {{
+                  pokemonService.isFavorite(pokemonService.selected)
+                    ? 'Odebrat z oblíbených'
+                    : 'Přidat do oblíbených'
+                }}
+              </ion-button>
+
               <ion-button expand="block" (click)="clearDetail()">
                 Zavřít detail
               </ion-button>

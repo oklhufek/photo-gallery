@@ -29,6 +29,8 @@ export class PokemonService {
   nextUrl: string | null = null;
   prevUrl: string | null = null;
 
+  favorites: PokemonListItem[] = []; // <- musí existovat
+
   constructor(private http: HttpClient) {}
 
   initFirstPage() {
@@ -93,6 +95,33 @@ export class PokemonService {
 
   prevPage() {
     if (this.prevUrl) this.loadPage(this.prevUrl);
+  }
+
+  isFavorite(p: { id?: number | null } | null | undefined): boolean {
+    if (!p || !p.id) return false;
+    return this.favorites.some((f) => f.id === p.id);
+  }
+
+  toggleFavoriteFromDetail() {
+    if (!this.selected) return;
+    const id = this.selected.id;
+    const already = this.isFavorite(this.selected);
+
+    if (already) {
+      this.favorites = this.favorites.filter((f) => f.id !== id);
+      return;
+    }
+
+    const fromList = this.pokemon.find((p) => p.id === id);
+    this.favorites.push({
+      name: this.selected.name,
+      url: fromList?.url || `${this.apiUrl}/${id}/`,
+      id,
+      image:
+        fromList?.image ||
+        this.selected.sprites.front_default ||
+        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+    });
   }
 }
 
