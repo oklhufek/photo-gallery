@@ -1,17 +1,107 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Pokédex</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-searchbar
+    placeholder="Hledej podle jména"
+    (ionInput)="searchChanged($event)"
+  ></ion-searchbar>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" sizeLg="6">
+        <ng-container *ngIf="!pokemonService.loadingList; else listLoading">
+          <ion-list>
+            <ion-item
+              button
+              detail="false"
+              *ngFor="let p of pokemonService.filtered"
+              (click)="openDetail(p)"
+            >
+              <ion-avatar slot="start">
+                <ion-img [src]="p.image" alt="{{ p.name }}"></ion-img>
+              </ion-avatar>
+              <ion-label>
+                <h2>{{ p.name | titlecase }}</h2>
+                <p>#{{ p.id }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+          <ion-buttons class="ion-padding" style="justify-content: center">
+            <ion-button (click)="prevPage()" [disabled]="!pokemonService.prevUrl">
+              Prev
+            </ion-button>
+            <ion-button (click)="nextPage()" [disabled]="!pokemonService.nextUrl">
+              Next
+            </ion-button>
+          </ion-buttons>
+        </ng-container>
+
+        <ng-template #listLoading>
+          <div class="ion-text-center ion-padding">
+            <ion-spinner name="crescent"></ion-spinner>
+          </div>
+        </ng-template>
+      </ion-col>
+
+      <ion-col size="12" sizeLg="6">
+        <ng-container *ngIf="pokemonService.selected; else noSelection">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>
+                {{ pokemonService.selected?.name | titlecase }}
+                #{{ pokemonService.selected?.id }}
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="ion-text-center ion-padding">
+                <ion-img
+                  [src]="pokemonService.selected?.sprites?.front_default"
+                  alt="{{ pokemonService.selected.name }}"
+                  style="max-width: 150px; margin: 0 auto"
+                ></ion-img>
+              </div>
+
+              <div class="ion-padding-vertical">
+                <strong>Typy:</strong>
+                <div>
+                  <ion-chip *ngFor="let t of pokemonService.selected?.types">
+                    {{ t.type.name }}
+                  </ion-chip>
+                </div>
+              </div>
+
+              <div class="ion-padding-vertical">
+                <strong>Staty:</strong>
+                <ion-grid>
+                  <ion-row *ngFor="let s of pokemonService.selected?.stats">
+                    <ion-col size="6">{{ s.stat.name }}</ion-col>
+                    <ion-col size="6">{{ s.base_stat }}</ion-col>
+                  </ion-row>
+                </ion-grid>
+              </div>
+
+              <ion-button expand="block" (click)="clearDetail()">
+                Zavřít detail
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+
+        <ng-template #noSelection>
+          <div class="ion-text-center ion-padding">
+            <p>Vyber Pokémona ze seznamu.</p>
+          </div>
+        </ng-template>
+
+        <div *ngIf="pokemonService.loadingDetail" class="ion-text-center ion-padding">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
