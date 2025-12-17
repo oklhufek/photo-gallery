@@ -4,8 +4,8 @@ import {
   IonTabs,
   IonTabBar,
   IonTabButton,
-  IonIcon,
   IonLabel,
+  IonImg,
 } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 
@@ -20,7 +20,7 @@ import { RouterModule } from '@angular/router';
     IonTabs,
     IonTabBar,
     IonTabButton,
-    IonIcon,
+    IonImg,
     IonLabel,
   ],
 })

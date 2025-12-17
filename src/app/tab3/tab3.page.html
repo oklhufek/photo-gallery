@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Porovnávač Pokémonů
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,11 +9,70 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
+      <ion-title size="large">Porovnávač</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div style="height: 100%; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: 600;">
-    Ondřej Klhůfek
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" sizeLg="6" *ngFor="let p of pokemonService.compare">
+        <ion-card *ngIf="p as sel">
+          <ion-card-header>
+            <ion-card-title>
+              {{ sel.name | titlecase }} #{{ sel.id }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="ion-text-center ion-padding">
+              <ion-img
+                [src]="sel.sprites?.front_default"
+                alt="{{ sel.name }}"
+                style="max-width: 150px; margin: 0 auto"
+              ></ion-img>
+            </div>
+
+            <div class="ion-padding-vertical">
+              <strong>Typy:</strong>
+              <div>
+                <ion-chip *ngFor="let t of sel.types">
+                  {{ t.type.name }}
+                </ion-chip>
+              </div>
+            </div>
+
+            <div class="ion-padding-vertical">
+              <strong>Staty:</strong>
+              <ion-grid>
+                <ion-row *ngFor="let s of sel.stats">
+                  <ion-col size="6">{{ s.stat.name }}</ion-col>
+                  <ion-col size="6">{{ s.base_stat }}</ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+
+            <ion-button
+              expand="block"
+              color="danger"
+              (click)="pokemonService.removeFromCompare(sel)"
+            >
+              Odebrat z porovnávače
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col
+        size="12"
+        sizeLg="6"
+        *ngIf="pokemonService.compare.length < 2"
+      >
+        <div class="ion-text-center ion-padding">
+          <p>
+            Vyber si až dva Pokémony v detailu na Tab 1 nebo Tab 2 a
+            přidej je do porovnávače.
+          </p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -21,12 +21,68 @@
         sizeMd="4"
         sizeLg="3"
         *ngFor="let f of pokemonService.favorites"
+        (click)="openDetail(f)"
       >
         <ion-img [src]="f.image" alt="{{ f.name }}"></ion-img>
         <p class="ion-text-center">{{ f.name | titlecase }}</p>
+        <ion-chip color="secondary" *ngIf="pokemonService.isInCompare(f)">
+          V porovnávači
+        </ion-chip>
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ion-card *ngIf="pokemonService.selected as sel">
+    <ion-card-header>
+      <ion-card-title>
+        {{ sel.name | titlecase }} #{{ sel.id }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="ion-text-center ion-padding">
+        <ion-img
+          [src]="sel.sprites?.front_default"
+          alt="{{ sel.name }}"
+          style="max-width: 150px; margin: 0 auto"
+        ></ion-img>
+      </div>
+
+      <div class="ion-padding-vertical">
+        <strong>Typy:</strong>
+        <div>
+          <ion-chip *ngFor="let t of sel.types">
+            {{ t.type.name }}
+          </ion-chip>
+        </div>
+      </div>
+
+      <div class="ion-padding-vertical">
+        <strong>Staty:</strong>
+        <ion-grid>
+          <ion-row *ngFor="let s of sel.stats">
+            <ion-col size="6">{{ s.stat.name }}</ion-col>
+            <ion-col size="6">{{ s.base_stat }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+
+      <ion-button
+        expand="block"
+        color="danger"
+        (click)="removeFavoriteFromSelected()"
+      >
+        Odebrat z oblíbených
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        color="secondary"
+        (click)="pokemonService.addSelectedToCompare()"
+      >
+        Přidat do porovnávače
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 
   <ng-template #noFavs>
     <p class="ion-text-center ion-padding">

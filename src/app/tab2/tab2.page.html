@@ -27,6 +27,9 @@
               <ion-label>
                 <h2>{{ p.name | titlecase }}</h2>
                 <p>#{{ p.id }}</p>
+                <ion-chip color="secondary" *ngIf="pokemonService.isInCompare(p)">
+                  V porovnávači
+                </ion-chip>
               </ion-label>
             </ion-item>
           </ion-list>
@@ -95,6 +98,14 @@
                     ? 'Odebrat z oblíbených'
                     : 'Přidat do oblíbených'
                 }}
+              </ion-button>
+
+              <ion-button
+                expand="block"
+                color="secondary"
+                (click)="pokemonService.addSelectedToCompare()"
+              >
+                Přidat do porovnávače
               </ion-button>
 
               <ion-button expand="block" (click)="clearDetail()">

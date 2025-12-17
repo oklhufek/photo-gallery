@@ -9,6 +9,13 @@ import {
   IonRow,
   IonCol,
   IonImg,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonButton,
+  IonChip,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { PokemonService } from '../services/photo';
 
@@ -27,9 +34,24 @@ import { PokemonService } from '../services/photo';
     IonRow,
     IonCol,
     IonImg,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonButton,
+    IonChip,
+    IonSpinner,
     TitleCasePipe,
   ],
 })
 export class Tab1Page {
   constructor(public pokemonService: PokemonService) {}
+
+  openDetail(f: any) {
+    this.pokemonService.openDetail(f);
+  }
+
+  removeFavoriteFromSelected() {
+    this.pokemonService.removeFavorite(this.pokemonService.selected);
+  }
 }

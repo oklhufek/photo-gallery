@@ -23,11 +23,16 @@ export class PokemonService {
 
   pokemon: PokemonListItem[] = [];
   filtered: PokemonListItem[] = [];
+  allPokemon: PokemonListItem[] = [];
   selected?: PokemonDetail | null;
+  compare: PokemonDetail[] = [];
   loadingList = false;
   loadingDetail = false;
   nextUrl: string | null = null;
   prevUrl: string | null = null;
+
+  private allLoaded = false;
+  private loadingAll = false;
 
   favorites: PokemonListItem[] = []; // <- musí existovat
 
@@ -67,9 +72,51 @@ export class PokemonService {
 
   search(term: string) {
     const q = term.toLowerCase().trim();
-    this.filtered = !q
-      ? this.pokemon
-      : this.pokemon.filter((p) => p.name.toLowerCase().includes(q));
+    if (!q) {
+      this.filtered = this.pokemon;
+      return;
+    }
+
+    if (this.allLoaded) {
+      this.filtered = this.allPokemon.filter((p) =>
+        p.name.toLowerCase().includes(q)
+      );
+      return;
+    }
+
+    if (this.loadingAll) {
+      this.filtered = this.pokemon.filter((p) =>
+        p.name.toLowerCase().includes(q)
+      );
+      return;
+    }
+
+    this.loadingAll = true;
+    this.loadingList = true;
+    this.http
+      .get<any>(`${this.apiUrl}?limit=2000&offset=0`)
+      .subscribe({
+        next: (res) => {
+          this.allPokemon = res.results.map((p: any) => {
+            const id = this.extractId(p.url);
+            return {
+              ...p,
+              id,
+              image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+            } as PokemonListItem;
+          });
+          this.allLoaded = true;
+          this.filtered = this.allPokemon.filter((p) =>
+            p.name.toLowerCase().includes(q)
+          );
+          this.loadingAll = false;
+          this.loadingList = false;
+        },
+        error: () => {
+          this.loadingAll = false;
+          this.loadingList = false;
+        },
+      });
   }
 
   openDetail(p: PokemonListItem) {
@@ -122,6 +169,35 @@ export class PokemonService {
         this.selected.sprites.front_default ||
         `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
     });
+  }
+
+  removeFavorite(p: { id?: number | null } | null | undefined) {
+    if (!p || !p.id) return;
+    this.favorites = this.favorites.filter((f) => f.id !== p.id);
+  }
+
+  addSelectedToCompare() {
+    if (!this.selected) return;
+    const id = this.selected.id;
+    const exists = this.compare.some((c) => c.id === id);
+    if (exists) return;
+
+    if (this.compare.length < 2) {
+      this.compare = [...this.compare, this.selected];
+    } else {
+      // pokud jsou už dva, nahradíme prvního novým
+      this.compare = [this.compare[1], this.selected];
+    }
+  }
+
+  removeFromCompare(p: { id?: number | null } | null | undefined) {
+    if (!p || !p.id) return;
+    this.compare = this.compare.filter((c) => c.id !== p.id);
+  }
+
+  isInCompare(p: { id?: number | null } | null | undefined): boolean {
+    if (!p || !p.id) return false;
+    return this.compare.some((c) => c.id === p.id);
   }
 }
 
