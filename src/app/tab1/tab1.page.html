@@ -21,13 +21,14 @@
         sizeMd="4"
         sizeLg="3"
         *ngFor="let f of pokemonService.favorites"
-        (click)="openDetail(f)"
       >
-        <ion-img [src]="f.image" alt="{{ f.name }}"></ion-img>
-        <p class="ion-text-center">{{ f.name | titlecase }}</p>
-        <ion-chip color="secondary" *ngIf="pokemonService.isInCompare(f)">
-          V porovnávači
-        </ion-chip>
+        <div class="fav-item" (click)="openDetail(f)">
+          <ion-img [src]="f.image" alt="{{ f.name }}"></ion-img>
+          <p>{{ f.name | titlecase }}</p>
+          <ion-chip color="secondary" *ngIf="pokemonService.isInCompare(f)">
+            V porovnávači
+          </ion-chip>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

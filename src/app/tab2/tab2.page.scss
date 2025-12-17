@@ -1,0 +1,88 @@
+ion-list {
+  background: transparent;
+  padding: 10px;
+}
+
+ion-item {
+  --background: var(--ion-item-background, #fff);
+  --border-radius: 12px;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  /* Remove default lines */
+  --border-width: 0;
+  --inner-border-width: 0;
+
+  ion-avatar {
+    width: 56px;
+    height: 56px;
+    margin-right: 16px;
+    background: rgba(var(--ion-color-light-rgb), 0.5);
+    border-radius: 50%;
+    padding: 4px;
+  }
+
+  ion-label {
+    h2 {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+      font-weight: 500;
+    }
+  }
+}
+
+/* Expanded state styling */
+.expanded-item {
+  --background: var(--ion-color-light);
+  margin-bottom: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.detail-expand {
+  background: var(--ion-background-color);
+  margin-bottom: 10px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  animation: slideDown 0.3s ease-out;
+}
+
+.detail-card {
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode adjustments if needed, though Ionic handles vars well */
+@media (prefers-color-scheme: dark) {
+  ion-item {
+    --background: var(--ion-card-background, #1e1e1e);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .expanded-item {
+    --background: #2c2c2c;
+  }
+}

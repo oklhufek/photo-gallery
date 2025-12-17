@@ -56,6 +56,8 @@ import { PokemonService } from '../services/photo';
   ],
 })
 export class Tab2Page {
+  expandedPokemon: string | null = null;
+
   constructor(public pokemonService: PokemonService) {}
 
   ngOnInit() {
@@ -66,11 +68,22 @@ export class Tab2Page {
     this.pokemonService.search(ev.detail.value || '');
   }
 
+  toggleDetail(p: any) {
+    if (this.expandedPokemon === p.name) {
+      this.expandedPokemon = null;
+      this.pokemonService.selected = null;
+    } else {
+      this.expandedPokemon = p.name;
+      this.pokemonService.openDetail(p);
+    }
+  }
+
   openDetail(p: any) {
-    this.pokemonService.openDetail(p);
+    this.toggleDetail(p);
   }
 
   clearDetail() {
+    this.expandedPokemon = null;
     this.pokemonService.clearDetail();
   }
 

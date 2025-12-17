@@ -1,0 +1,29 @@
+ion-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 16px;
+}
+
+ion-card-title {
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+ion-chip {
+  margin: 2px;
+}
+
+/* Style stats rows */
+ion-row {
+  border-bottom: 1px solid var(--ion-color-light-shade);
+  padding: 4px 0;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+ion-col {
+  font-size: 0.9rem;
+}
